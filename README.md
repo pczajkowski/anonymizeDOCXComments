@@ -2,7 +2,7 @@
 
 While doing review in Word documents translators/reviewers often use tracked changes and comments to exchange feedback on translations. Usually these people are from different organizations and shouldn't know about each other. Hence the need to anonymize comments and this is what this tool will do for you.
 
-It'll go through comments in "word/comments.xml" and change each author's name to Author<number>, where number starts from 1. It'll keep track of authors so "John Smith" will always be "Author1" for instance. After it's done it'll print list of authors and their new names.
+It'll go through comments in "word/comments.xml" and change each author's name to Author*number*, where number starts from 1. It'll keep track of authors so "John Smith" will always be "Author1" for instance. After it's done it'll print list of authors and their new names.
 
 Usage:
 
