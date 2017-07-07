@@ -49,12 +49,12 @@ static int processDOCX(char const *infile, char const *outfile) {
 
 	archiveIn = archive_read_new();
 	archive_read_support_format_zip(archiveIn);
-	Stopif(archive_read_open_filename(archiveIn, infile, 10240), return -1, "Can't read file %s\n!", infile);
+	Stopif(archive_read_open_filename(archiveIn, infile, 10240), return -1, "Can't read file %s!\n", infile);
 
 	archiveOut = archive_write_new();
 	archive_write_set_format_zip(archiveOut);
 
-	Stopif(archive_write_open_filename(archiveOut, outfile) != ARCHIVE_OK, return -1, "Can't create new archive %s\n", outfile);
+	Stopif(archive_write_open_filename(archiveOut, outfile) != ARCHIVE_OK, return -1, "Can't create new archive %s!\n", outfile);
 
 	Stopif(!rewriteZIP(archiveIn, archiveOut), return -1, "Problems rewriting zip!\n");
 	Stopif(archive_read_free(archiveIn) != ARCHIVE_OK, return -1, "Can't free %s!\n", infile);

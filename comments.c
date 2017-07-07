@@ -28,17 +28,17 @@ int anonymizeComments(XMLBuff *infile) {
 	const xmlChar *authorPath = (xmlChar*)"//w:comment/@w:author";
 
 	xmlDocPtr doc = xmlReadMemory(infile->data, infile->size, infile->name, NULL, 0);
-	Stopif(!doc, return -1, "Error: unable to parse file \"%s\"\n", infile->name);
+	Stopif(!doc, return -1, "Unable to parse file %s!\n", infile->name);
 
 	xmlXPathContextPtr context = xmlXPathNewContext(doc);
-	Stopif(!context, return -1, "Error: unable to create new XPath context\n");
+	Stopif(!context, return -1, "Unable to create new XPath context!\n");
 
 	const xmlChar* prefix = (xmlChar*)"w";
 	const xmlChar* ns = (xmlChar*)"http://schemas.openxmlformats.org/wordprocessingml/2006/main";
-	Stopif(xmlXPathRegisterNs(context, prefix, ns), return -1, "Error: Can't add namespace!\n");
+	Stopif(xmlXPathRegisterNs(context, prefix, ns), return -1, "Can't add namespace!\n");
 
 	xmlXPathObjectPtr authors = xmlXPathEvalExpression(authorPath, context);
-	Stopif(!authors, return -1, "Something is wrong with XPATH %s\n", authorPath);
+	Stopif(!authors, return -1, "Something is wrong with XPATH %s!\n", authorPath);
 
 	xmlChar *authorName = (xmlChar*)"";
 	for (int i=0; i < authors->nodesetval->nodeNr; i++){
@@ -51,7 +51,7 @@ int anonymizeComments(XMLBuff *infile) {
 	xmlDocDumpMemoryEnc(doc, &buf, &infile->size, "UTF-8");
 	infile->data = (char*)buf;
 
-	Stopif(!infile->size, return -1, "Errors: unable to save file %s\n", infile->name);
+	Stopif(!infile->size, return -1, "Unable to save file %s!\n", infile->name);
 
 	xmlXPathFreeObject(authors);
 	xmlXPathFreeContext(context);
