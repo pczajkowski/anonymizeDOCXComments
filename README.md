@@ -7,6 +7,7 @@ It'll go through comments in "word/comments.xml" and change each author's name t
 Usage:
 
 *./anonymize test.docx* - test.docx will be replaced with anonymized version.
+
 *./anonymize test.docx test2.docx* - anonymized version will be saved as test2.docx leaving original test.docx intact.
 
 Running it on provided *test.docx* should produce:
