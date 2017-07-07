@@ -5,10 +5,12 @@ While doing review in Word documents translators/reviewers often use tracked cha
 It'll go through comments in "word/comments.xml" and change each author's name to Author<number>, where number starts from 1. It'll keep track of authors so "John Smith" will always be "Author1" for instance. After it's done it'll print list of authors and their new names.
 
 Usage:
+
 *./anonymize test.docx* - test.docx will be replaced with anonymized version.
 *./anonymize test.docx test2.docx* - anonymized version will be saved as test2.docx leaving original test.docx intact.
 
 Running it on provided *test.docx* should produce:
+
 	"King, Stephen" is now "Author1"
 	"Kowalski, Jan" is now "Author2"
 	"Piotr Fronczewski" is now "Author3"
