@@ -9,7 +9,7 @@ dictionary *dictionary_new (void){
 	static int dnf;
 	if (!dictionary_not_found) dictionary_not_found = &dnf;
 	dictionary *out= malloc(sizeof(dictionary));
-	*out= (dictionary){ };                          
+	*out= (dictionary){ .pairs=NULL };                          
 	return out;
 } 
 

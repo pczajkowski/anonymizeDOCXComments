@@ -29,7 +29,7 @@ static int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 
 	while (archive_read_next_header(archiveIn, &entryIn) == ARCHIVE_OK) {
 		const char* path = archive_entry_pathname(entryIn);
-		size_t size = archive_entry_size(entryIn);
+		int64_t size = archive_entry_size(entryIn);
 		char buf[size];
 		Stopif(archive_read_data(archiveIn, buf, size) != size, return -2, "Archive entry has no size (%s)!\n", path);
 
