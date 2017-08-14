@@ -1,12 +1,9 @@
 #define _GNU_SOURCE //asks stdio.h to include asprintf
 #include <stdio.h>
-#include <libxml2/libxml/xpath.h>
-#include <libxml2/libxml/xpathInternals.h>
+#include "comments.h"
 #include "stopif.h"
-#include "xmlbuff.h"
-#include "dict.h"
 
-static char* anonymizeAuthor(dictionary *authors, xmlChar const *authorName) {
+char* anonymizeAuthor(dictionary *authors, xmlChar const *authorName) {
 	char *name = (char*)authorName;
 	char *newName = (char*)dictionary_find(authors, name);
 
@@ -18,13 +15,29 @@ static char* anonymizeAuthor(dictionary *authors, xmlChar const *authorName) {
 	return newName;
 }
 
-static void printAuthors(dictionary *authors) {
+void printAuthors(dictionary *authors) {
 	for (int i=0; i<authors->length; i++)
 		printf("\"%s\" is now \"%s\"\n", authors->pairs[i]->key, (char*)authors->pairs[i]->value);
 }
 
-int anonymizeComments(XMLBuff *infile) {
+int processAuthors(xmlXPathObjectPtr authors) {
 	dictionary *anonAuthors = dictionary_new();
+	
+	xmlChar *authorName = (xmlChar*)"";
+	for (int i=0; i < authors->nodesetval->nodeNr; i++){
+		
+		authorName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
+		char *anonAuthor = anonymizeAuthor(anonAuthors, authorName);
+		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
+	}
+	xmlFree(authorName);
+
+	printAuthors(anonAuthors);
+	dictionary_free(anonAuthors);
+	return 1;
+}
+
+int anonymizeComments(XMLBuff *infile) {
 	const xmlChar *authorPath = (xmlChar*)"//w:comment/@w:author";
 
 	xmlDocPtr doc = xmlReadMemory(infile->data, infile->size, infile->name, NULL, 0);
@@ -40,12 +53,7 @@ int anonymizeComments(XMLBuff *infile) {
 	xmlXPathObjectPtr authors = xmlXPathEvalExpression(authorPath, context);
 	Stopif(!authors, return 0, "Something is wrong with XPATH %s!\n", authorPath);
 
-	xmlChar *authorName = (xmlChar*)"";
-	for (int i=0; i < authors->nodesetval->nodeNr; i++){
-		authorName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
-		char *anonAuthor = anonymizeAuthor(anonAuthors, authorName);
-		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
-	}
+	Stopif(!processAuthors(authors), return 0, "Can't process authors!\n");
 
 	xmlChar *buf;
 	xmlDocDumpMemoryEnc(doc, &buf, &infile->size, "UTF-8");
@@ -57,8 +65,6 @@ int anonymizeComments(XMLBuff *infile) {
 	xmlXPathFreeContext(context);
 	xmlFreeDoc(doc);
 	xmlCleanupParser();
-	printAuthors(anonAuthors);
-	xmlFree(authorName);
-	dictionary_free(anonAuthors);
+
 	return 1;
 }
