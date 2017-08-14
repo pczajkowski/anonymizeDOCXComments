@@ -49,7 +49,7 @@ static int processDOCX(char const *infile, char const *outfile) {
 
 	archiveIn = archive_read_new();
 	archive_read_support_format_zip(archiveIn);
-	Stopif(archive_read_open_filename(archiveIn, infile, 10240), return 0, "Can't read file %s!\n", infile);
+	Stopif(archive_read_open_filename(archiveIn, infile, 10240) != ARCHIVE_OK, return 0, "Can't read file %s!\n", infile);
 
 	archiveOut = archive_write_new();
 	archive_write_set_format_zip(archiveOut);
