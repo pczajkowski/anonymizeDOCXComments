@@ -1,11 +1,12 @@
 // Borrowed from https://github.com/b-k/21st-Century-Examples
 #include <stdlib.h> //malloc
+#include <string.h>
 #include <strings.h> //strcasecmp (from POSIX)
 #include "keyval.h"
 
 keyval *keyval_new(char *key, void *value){
     keyval *out = malloc(sizeof(keyval));
-    *out = (keyval){.key = key, .value=value};
+    *out = (keyval){.key = strdup(key), .value=strdup(value)};
     return out;
 }
 

@@ -12,7 +12,8 @@ char* anonymizeAuthor(dictionary *authors, xmlChar const *authorName) {
 
 	asprintf(&newName, "Author%d", authors->length+1);
 	dictionary_add(authors, name, newName);
-	return newName;
+	free(newName);
+	return (char*)dictionary_find(authors, name);
 }
 
 void printAuthors(dictionary *authors) {
@@ -23,14 +24,13 @@ void printAuthors(dictionary *authors) {
 int processAuthors(xmlXPathObjectPtr authors) {
 	dictionary *anonAuthors = dictionary_new();
 	
-	xmlChar *authorName = (xmlChar*)"";
 	for (int i=0; i < authors->nodesetval->nodeNr; i++){
-		
+		xmlChar *authorName = (xmlChar*)"";		
 		authorName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
 		char *anonAuthor = anonymizeAuthor(anonAuthors, authorName);
 		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
+		xmlFree(authorName);
 	}
-	xmlFree(authorName);
 
 	printAuthors(anonAuthors);
 	dictionary_free(anonAuthors);
