@@ -1,17 +1,11 @@
-#include <stdio.h>
-#include <archive.h>
-#include <archive_entry.h>
-#include <string.h>
-#include "comments.h"
+#include "zip.h"
 #include "stopif.h"
 
-static int processComments(struct archive *archiveOut, char buf[], size_t size, const char* path) {
-	XMLBuff *comments = XMLBuffNew();
-	*comments = (XMLBuff){.data=buf, .size=size, .name=path};
-	anonymizeComments(comments);
+int processComments(struct archive *archiveOut, XMLBuff *comments) {
+	Stopif(!anonymizeComments(comments), return 0, "Can't anonymize comments!\n");
 
 	struct archive_entry *newEntry = archive_entry_new();
-	archive_entry_set_pathname(newEntry, path);
+	archive_entry_set_pathname(newEntry, comments->name);
 	archive_entry_set_size(newEntry, comments->size);
 	archive_entry_set_filetype(newEntry, AE_IFREG);
 	archive_entry_set_perm(newEntry, 0664);
@@ -19,11 +13,10 @@ static int processComments(struct archive *archiveOut, char buf[], size_t size, 
 	Stopif(archive_write_header(archiveOut, newEntry) != ARCHIVE_OK, return 0, "Can't write entry header (comments)!\n");
 	Stopif(archive_write_data(archiveOut, comments->data, comments->size) != comments->size, return 0, "Can't write data (comments)!\n");
 	archive_entry_free(newEntry);
-	XMLBuffFree(comments);
 	return 1;
 }
 
-static int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
+int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 	const char *commentsFile = "word/comments.xml";
 	struct archive_entry *entryIn;
 
@@ -34,7 +27,10 @@ static int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 		Stopif(archive_read_data(archiveIn, buf, size) != size, return 0, "Archive entry has no size (%s)!\n", path);
 
 		if (strcmp(commentsFile, path) == 0){
-			Stopif(!processComments(archiveOut, buf, size, path), return 0, "Can't process comments!\n");
+			XMLBuff *comments = XMLBuffNew();
+			*comments = (XMLBuff){.data=buf, .size=size, .name=path};
+			Stopif(!processComments(archiveOut, comments), return 0, "Can't process comments!\n");
+			XMLBuffFree(comments);
 		} else {
 			Stopif(archive_write_header(archiveOut, entryIn) != ARCHIVE_OK, return 0, "Can't write entry header!\n");
 			Stopif(archive_write_data(archiveOut, buf, size) != size, return 0, "Can't write data!\n");
@@ -43,7 +39,7 @@ static int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 	return 1;
 }
 
-static int processDOCX(char const *infile, char const *outfile) {
+int processDOCX(char const *infile, char const *outfile) {
 	struct archive *archiveIn;
 	struct archive *archiveOut;
 
