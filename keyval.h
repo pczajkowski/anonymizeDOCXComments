@@ -1,7 +1,7 @@
 // Borrowed from https://github.com/b-k/21st-Century-Examples
 typedef struct keyval{
-   char *key;
-   void *value;
+	char *key;
+	void *value;
 } keyval;
 
 keyval *keyval_new(char *key, void *value);

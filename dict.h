@@ -4,8 +4,8 @@
 extern void *dictionary_not_found;
 
 typedef struct dictionary{
-   keyval **pairs;
-   int length;
+	keyval **pairs;
+	int length;
 } dictionary;
 
 dictionary *dictionary_new (void);

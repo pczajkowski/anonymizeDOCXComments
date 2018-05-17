@@ -23,7 +23,7 @@ void printAuthors(const dictionary *authors) {
 
 int processAuthors(const xmlXPathObjectPtr authors) {
 	dictionary *anonAuthors = dictionary_new();
-	
+
 	for (int i=0; i < authors->nodesetval->nodeNr; i++){
 		xmlChar *authorName = (xmlChar*)"";		
 		authorName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
