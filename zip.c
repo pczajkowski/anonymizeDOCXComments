@@ -39,7 +39,7 @@ int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 	return 1;
 }
 
-int processDOCX(char const *infile, char const *outfile) {
+int processDOCX(const char *infile, const char *outfile) {
 	struct archive *archiveIn;
 	struct archive *archiveOut;
 
@@ -58,7 +58,7 @@ int processDOCX(char const *infile, char const *outfile) {
 	return 1;
 }
 
-int process(char const *infile, char *outfile) {
+int process(const char *infile, char *outfile) {
 	if (!outfile || strcmp(infile, outfile) == 0){
 		const char *outfile = "tmpFile.docx";
 		processDOCX(infile, outfile);
