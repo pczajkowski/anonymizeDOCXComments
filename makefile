@@ -1,4 +1,4 @@
-CFLAGS=`pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99
+CFLAGS=`pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=c99
 LDLIBS=`pkg-config --libs libxml-2.0` -larchive
 objects=keyval.o dict.o comments.o zip.o xmlbuff.o
 mingwCFLAGS=`x86_64-w64-mingw32-pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99

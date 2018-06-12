@@ -4,9 +4,14 @@
 #include <strings.h> //strcasecmp (from POSIX)
 #include "keyval.h"
 
-keyval *keyval_new(char *key, void *value){
+keyval *keyval_new(char *key, char *value){
 	keyval *out = malloc(sizeof(keyval));
-	*out = (keyval){.key = strdup(key), .value=strdup(value)};
+	out->key = malloc(strlen(key)+1);
+	out->value = malloc(strlen(value)+1);
+
+	strcpy(out->key, key);
+	strcpy(out->value, value);
+
 	return out;
 }
 
