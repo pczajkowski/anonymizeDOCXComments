@@ -3,7 +3,7 @@
 #include "comments.h"
 #include "stopif.h"
 
-char* anonymizeAuthor(dictionary *authors, xmlChar const *authorName) {
+char* anonymizeAuthor(dictionary *authors, const xmlChar *authorName) {
 	char *name = (char*)authorName;
 	char *newName = (char*)dictionary_find(authors, name);
 
@@ -16,12 +16,12 @@ char* anonymizeAuthor(dictionary *authors, xmlChar const *authorName) {
 	return (char*)dictionary_find(authors, name);
 }
 
-void printAuthors(dictionary *authors) {
+void printAuthors(const dictionary *authors) {
 	for (int i=0; i<authors->length; i++)
 		printf("\"%s\" is now \"%s\"\n", authors->pairs[i]->key, (char*)authors->pairs[i]->value);
 }
 
-int processAuthors(xmlXPathObjectPtr authors) {
+int processAuthors(const xmlXPathObjectPtr authors) {
 	dictionary *anonAuthors = dictionary_new();
 
 	for (int i=0; i < authors->nodesetval->nodeNr; i++){
