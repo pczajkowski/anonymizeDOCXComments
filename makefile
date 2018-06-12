@@ -1,10 +1,10 @@
 CFLAGS=`pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=c99
 LDLIBS=`pkg-config --libs libxml-2.0` -larchive
 objects=keyval.o dict.o comments.o zip.o xmlbuff.o
-mingwCFLAGS=`x86_64-w64-mingw32-pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99
+mingwCFLAGS=`x86_64-w64-mingw32-pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=c99
 mingwLDLIBS=`x86_64-w64-mingw32-pkg-config --libs libxml-2.0` -larchive
 mingw=x86_64-w64-mingw32-gcc
-MACCFLAGS=`pkg-config --cflags --libs libxml-2.0 libarchive` -g -Wall -Wextra -O3 -std=gnu99
+MACCFLAGS=`pkg-config --cflags --libs libxml-2.0 libarchive` -g -Wall -Wextra -O3 -std=c99
 MACLDLIBS=`pkg-config --libs libxml-2.0 libarchive`
 
 anonymize: $(objects)
