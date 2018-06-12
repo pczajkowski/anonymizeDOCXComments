@@ -1,7 +1,6 @@
 // Borrowed from https://github.com/b-k/21st-Century-Examples
 #include <stdlib.h> //malloc
 #include <string.h>
-#include <strings.h> //strcasecmp (from POSIX)
 #include "keyval.h"
 
 keyval *keyval_new(char *key, char *value){
@@ -30,5 +29,5 @@ void keyval_free(keyval *in){
 }
 
 int keyval_matches(keyval const *in, char const *key){
-	return !strcasecmp(in->key, key);
+	return !strcmp(in->key, key);
 }
