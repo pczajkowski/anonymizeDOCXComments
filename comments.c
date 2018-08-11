@@ -3,37 +3,39 @@
 #include "comments.h"
 #include "stopif.h"
 
-char* anonymizeAuthor(dictionary *authors, const xmlChar *authorName) {
+char* anonymizeAuthor(binn *authors, const xmlChar *authorName) {
+	static int authorsCount = 0;
+
 	char *name = (char*)authorName;
-	char *newName = (char*)dictionary_find(authors, name);
+	char *newName = binn_object_str(authors, name);
 
 	if (newName)
 		return newName;
 
-	asprintf(&newName, "Author%d", authors->length+1);
-	dictionary_add(authors, name, newName);
+	asprintf(&newName, "Author%d", ++authorsCount);
+	binn_object_set_str(authors, name, newName);
 	free(newName);
-	return (char*)dictionary_find(authors, name);
+	return binn_object_str(authors, name);
 }
 
-void printAuthors(const dictionary *authors) {
-	for (int i=0; i<authors->length; i++)
-		printf("\"%s\" is now \"%s\"\n", authors->pairs[i]->key, (char*)authors->pairs[i]->value);
+void printAuthors(const xmlChar *authorName, const char *anonName) {
+	printf("\"%s\" is now \"%s\"\n", authorName, anonName);
 }
 
 int processAuthors(const xmlXPathObjectPtr authors) {
-	dictionary *anonAuthors = dictionary_new();
+	binn *anonAuthors = binn_object();
 
 	for (int i=0; i < authors->nodesetval->nodeNr; i++){
 		xmlChar *authorName = (xmlChar*)"";		
 		authorName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
 		char *anonAuthor = anonymizeAuthor(anonAuthors, authorName);
 		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
+
+		printAuthors(authorName, anonAuthor);
 		xmlFree(authorName);
 	}
 
-	printAuthors(anonAuthors);
-	dictionary_free(anonAuthors);
+	binn_free(anonAuthors);
 	return 1;
 }
 
