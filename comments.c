@@ -3,6 +3,10 @@
 #include "comments.h"
 #include "stopif.h"
 
+void printAuthors(const char *authorName, const char *anonName) {
+	printf("\"%s\" is now \"%s\"\n", authorName, anonName);
+}
+
 char* anonymizeAuthor(binn *authors, const xmlChar *authorName) {
 	static int authorsCount = 0;
 
@@ -14,12 +18,9 @@ char* anonymizeAuthor(binn *authors, const xmlChar *authorName) {
 
 	asprintf(&newName, "Author%d", ++authorsCount);
 	binn_object_set_str(authors, name, newName);
+	printAuthors(name, newName);
 	free(newName);
 	return binn_object_str(authors, name);
-}
-
-void printAuthors(const xmlChar *authorName, const char *anonName) {
-	printf("\"%s\" is now \"%s\"\n", authorName, anonName);
 }
 
 int processAuthors(const xmlXPathObjectPtr authors) {
@@ -30,8 +31,6 @@ int processAuthors(const xmlXPathObjectPtr authors) {
 		authorName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
 		char *anonAuthor = anonymizeAuthor(anonAuthors, authorName);
 		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
-
-		printAuthors(authorName, anonAuthor);
 		xmlFree(authorName);
 	}
 
