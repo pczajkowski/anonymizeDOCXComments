@@ -16,7 +16,7 @@ Running it on provided *test.docx* should produce:
 	"Kowalski, Jan" is now "Author2"
 	"Piotr Fronczewski" is now "Author3"
 
-File called *test.docx.bin* will be created containing details of the transformation.
+File called *test.docx.bin*, or *test2.docx.bin*, will be created containing details of the transformation.
 
 You can also deanonymize comments. Proper bin file, named "<your_orginial_docx>.bin", must be present.
 
