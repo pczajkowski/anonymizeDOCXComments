@@ -18,11 +18,11 @@ Running it on provided *test.docx* should produce:
 
 File called *test.docx.bin*, or *test2.docx.bin*, will be created containing details of the transformation.
 
-You can also deanonymize comments. Proper bin file, named "<your_orginial_docx>.bin", must be present.
+You can also de-anonymize comments. Proper bin file, named "<your_orginial_docx>.bin", must be present.
 
-*./anonymize test.docx -d* - test.docx will be replaced with deanonymized version.
+*./anonymize test.docx -d* - test.docx will be replaced with de-anonymized version.
 
-*./anonymize test.docx -d test2.docx* - deanonymized version will be saved as test2.docx leaving original test.docx intact.
+*./anonymize test.docx -d test2.docx* - de-anonymized version will be saved as test2.docx leaving original test.docx intact.
 
 You'll need libarchive, libxml2 and [lbinn](https://github.com/liteserver/binn) to compile it. It was created as learning project while I was exploring C, so use it freely, but at your own risk. Output was tested with Word 2013 and Libre Office Writer.
 
