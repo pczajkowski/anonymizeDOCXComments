@@ -59,6 +59,9 @@ int processDOCX(const char *infile, const char *outfile) {
 }
 
 int process(const char *infile, char *outfile) {
+	strcat(binnFile, infile);
+	strcat(binnFile, ".bin");
+
 	if (!outfile || strcmp(infile, outfile) == 0){
 		const char *outfile = "tmpFile.docx";
 		processDOCX(infile, outfile);

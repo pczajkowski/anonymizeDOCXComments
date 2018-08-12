@@ -7,20 +7,28 @@ void printAuthors(const char *authorName, const char *anonName) {
 	printf("\"%s\" is now \"%s\"\n", authorName, anonName);
 }
 
-char* anonymizeAuthor(binn *authors, const xmlChar *authorName) {
+char* anonymizeAuthor(binn *anonAuthors, const xmlChar *authorName) {
 	static int authorsCount = 0;
 
 	char *name = (char*)authorName;
-	char *newName = binn_object_str(authors, name);
+	char *newName = binn_object_str(anonAuthors, name);
 
 	if (newName)
 		return newName;
 
 	asprintf(&newName, "Author%d", ++authorsCount);
-	binn_object_set_str(authors, name, newName);
+	binn_object_set_str(anonAuthors, name, newName);
+	binn_object_set_str(anonAuthors, newName, name);
 	printAuthors(name, newName);
 	free(newName);
-	return binn_object_str(authors, name);
+
+	return binn_object_str(anonAuthors, name);
+}
+
+void saveAuthors(binn *anonAuthors) {
+	FILE *fp = fopen(binnFile, "w");
+	fwrite(binn_ptr(anonAuthors), binn_size(anonAuthors), 1, fp);
+	fclose(fp);
 }
 
 int processAuthors(const xmlXPathObjectPtr authors) {
@@ -33,7 +41,8 @@ int processAuthors(const xmlXPathObjectPtr authors) {
 		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
 		xmlFree(authorName);
 	}
-
+	
+	saveAuthors(anonAuthors);
 	binn_free(anonAuthors);
 	return 1;
 }

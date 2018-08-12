@@ -3,4 +3,6 @@
 #include <binn.h>
 #include "xmlbuff.h"
 
+char binnFile[256];
+
 int anonymizeComments(XMLBuff *infile);
