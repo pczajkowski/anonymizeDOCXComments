@@ -31,7 +31,7 @@ void saveAuthors(binn *anonAuthors) {
 	fclose(fp);
 }
 
-int processAuthors(const xmlXPathObjectPtr authors) {
+int anonymizeAuthors(const xmlXPathObjectPtr authors) {
 	binn *anonAuthors = binn_object();
 
 	for (int i=0; i < authors->nodesetval->nodeNr; i++){
@@ -45,6 +45,55 @@ int processAuthors(const xmlXPathObjectPtr authors) {
 	saveAuthors(anonAuthors);
 	binn_free(anonAuthors);
 	return 1;
+}
+
+char *data;
+
+binn *readAuthors() {
+	FILE *fp = fopen(binnFile, "rb");
+	if (fp == NULL) {
+		printf("Can't read bin file (%s)!\n", binnFile);
+		return NULL;
+	}
+
+        fseek(fp, 0, SEEK_END);
+        long fsize = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        data = malloc(fsize + 1);
+        fread(data, fsize, 1, fp);
+        fclose(fp);
+
+        data[fsize] = 0;
+
+        binn *obj = binn_open(data);
+	
+	return obj;
+}
+
+int deanonymizeAuthors(const xmlXPathObjectPtr authors) {
+	binn *anonAuthors = readAuthors();
+	if (anonAuthors == NULL) return 0;
+	
+	for (int i=0; i < authors->nodesetval->nodeNr; i++){
+		xmlChar *anonName = (xmlChar*)"";		
+		anonName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
+		
+		char *author = binn_object_str(anonAuthors, (char*)anonName);
+		if (author != NULL) xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)author);
+		xmlFree(anonName);
+	}
+	
+	free(data);
+	binn_free(anonAuthors);
+	return 1;
+}
+
+int processAuthors(const xmlXPathObjectPtr authors) {
+	if (action == DEANONYMIZE)
+		return deanonymizeAuthors(authors);
+	
+	return anonymizeAuthors(authors);
 }
 
 int anonymizeComments(XMLBuff *infile) {

@@ -4,6 +4,7 @@
 #include <string.h>
 #include "comments.h"
 
-extern char binnFile[256];
+char binnFile[256];
+int action;
 
 int process(char const *infile, char *outfile);
