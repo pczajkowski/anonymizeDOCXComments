@@ -2,7 +2,7 @@
 #include "stopif.h"
 
 int processComments(struct archive *archiveOut, XMLBuff *comments) {
-	Stopif(!anonymizeComments(comments), return 0, "Can't anonymize comments!\n");
+	if (!anonymizeComments(comments)) return 0;
 
 	struct archive_entry *newEntry = archive_entry_new();
 	archive_entry_set_pathname(newEntry, comments->name);
@@ -29,7 +29,8 @@ int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 		if (strcmp(commentsFile, path) == 0){
 			XMLBuff *comments = XMLBuffNew();
 			*comments = (XMLBuff){.data=buf, .size=size, .name=path};
-			Stopif(!processComments(archiveOut, comments), return 0, "Can't process comments!\n");
+			
+			if (!processComments(archiveOut, comments)) return 0;
 			XMLBuffFree(comments);
 		} else {
 			Stopif(archive_write_header(archiveOut, entryIn) != ARCHIVE_OK, return 0, "Can't write entry header!\n");
@@ -52,7 +53,8 @@ int processDOCX(const char *infile, const char *outfile) {
 
 	Stopif(archive_write_open_filename(archiveOut, outfile) != ARCHIVE_OK, return 0, "Can't create new archive %s!\n", outfile);
 
-	Stopif(!rewriteZIP(archiveIn, archiveOut), return 0, "Problems rewriting zip!\n");
+	if (!rewriteZIP(archiveIn, archiveOut)) return 0;
+	
 	Stopif(archive_read_free(archiveIn) != ARCHIVE_OK, return 0, "Can't free %s!\n", infile);
 	Stopif(archive_write_free(archiveOut) != ARCHIVE_OK, return 0, "Can't free %s!\n", outfile);
 	return 1;
