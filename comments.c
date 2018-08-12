@@ -80,7 +80,11 @@ int deanonymizeAuthors(const xmlXPathObjectPtr authors) {
 		anonName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
 		
 		char *author = binn_object_str(anonAuthors, (char*)anonName);
-		if (author != NULL) xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)author);
+		if (author != NULL) {
+			xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)author);
+			printAuthors((char*)anonName, author);
+		}
+		
 		xmlFree(anonName);
 	}
 	
