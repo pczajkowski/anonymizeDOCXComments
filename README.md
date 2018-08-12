@@ -16,6 +16,14 @@ Running it on provided *test.docx* should produce:
 	"Kowalski, Jan" is now "Author2"
 	"Piotr Fronczewski" is now "Author3"
 
+File called *test.docx.bin* will be created containing details of the transformation.
+
+You can also deanonymize comments. Proper bin file, named "<your_orginial_docx>.bin", must be present.
+
+*./anonymize test.docx -d* - test.docx will be replaced with deanonymized version.
+
+*./anonymize test.docx -d test2.docx* - deanonymized version will be saved as test2.docx leaving original test.docx intact.
+
 You'll need libarchive, libxml2 and [lbinn](https://github.com/liteserver/binn) to compile it. It was created as learning project while I was exploring C, so use it freely, but at your own risk. Output was tested with Word 2013 and Libre Office Writer.
 
 To relieve your pain I've added compiled Windows 64 bit binary in the bin folder. It includes all necessary MingW dlls. Enjoy!
