@@ -7,4 +7,5 @@
 char binnFile[256];
 int action;
 
-int process(char const *infile, char *outfile);
+int anonymize(char const *infile, char *outfile);
+int deanonymize(char const *infile, char *outfile);

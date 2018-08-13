@@ -16,16 +16,16 @@ int main(int argc, char **argv) {
 			action = 1;
 
 			if (argc > 3) {
-				process(argv[1], argv[3]);
+				deanonymize(argv[1], argv[3]);
 				return 0;
 			}
 
-			process(argv[1], NULL);
+			deanonymize(argv[1], NULL);
 			return 0;
 		}
 		
-		process(argv[1], argv[2]);
+		anonymize(argv[1], argv[2]);
 	}
 	else
-		process(argv[1], NULL);
+		anonymize(argv[1], NULL);
 }
