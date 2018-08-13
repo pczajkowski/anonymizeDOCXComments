@@ -67,6 +67,7 @@ int anonymize(const char *infile, char *outfile) {
 
 		const char *outfile = "tmpFile.docx";
 		processDOCX(infile, outfile);
+		remove(infile);
 		rename(outfile, infile);
 	} else {
 		strcat(binnFile, outfile);
@@ -84,6 +85,7 @@ int deanonymize(const char *infile, char *outfile) {
 	if (!outfile || strcmp(infile, outfile) == 0){
 		const char *outfile = "tmpFile.docx";
 		processDOCX(infile, outfile);
+		remove(infile);
 		rename(outfile, infile);
 	} else {
 		processDOCX(infile, outfile);
