@@ -2,7 +2,7 @@ CFLAGS=`pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99
 LDLIBS=`pkg-config --libs libxml-2.0` -larchive -lbinn
 objects=comments.o zip.o xmlbuff.o
 mingwCFLAGS=`x86_64-w64-mingw32-pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99
-mingwLDLIBS=`x86_64-w64-mingw32-pkg-config --libs libxml-2.0` -larchive -lbinn
+mingwLDLIBS=`x86_64-w64-mingw32-pkg-config --libs libxml-2.0` -larchive -lbinn-1.0
 mingw=x86_64-w64-mingw32-gcc
 MACCFLAGS=`pkg-config --cflags --libs libxml-2.0 libarchive` -g -Wall -Wextra -O3 -std=gnu99
 MACLDLIBS=`pkg-config --libs libxml-2.0 libarchive` -lbinn
