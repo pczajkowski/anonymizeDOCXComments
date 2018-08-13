@@ -3,26 +3,36 @@
 #include "comments.h"
 #include "stopif.h"
 
-char* anonymizeAuthor(dictionary *authors, const xmlChar *authorName) {
+void printAuthors(const char *authorName, const char *anonName) {
+	printf("\"%s\" is now \"%s\"\n", authorName, anonName);
+}
+
+char* anonymizeAuthor(binn *anonAuthors, const xmlChar *authorName) {
+	static int authorsCount = 0;
+
 	char *name = (char*)authorName;
-	char *newName = (char*)dictionary_find(authors, name);
+	char *newName = binn_object_str(anonAuthors, name);
 
 	if (newName)
 		return newName;
 
-	asprintf(&newName, "Author%d", authors->length+1);
-	dictionary_add(authors, name, newName);
+	asprintf(&newName, "Author%d", ++authorsCount);
+	binn_object_set_str(anonAuthors, name, newName);
+	binn_object_set_str(anonAuthors, newName, name);
+	printAuthors(name, newName);
 	free(newName);
-	return (char*)dictionary_find(authors, name);
+
+	return binn_object_str(anonAuthors, name);
 }
 
-void printAuthors(const dictionary *authors) {
-	for (int i=0; i<authors->length; i++)
-		printf("\"%s\" is now \"%s\"\n", authors->pairs[i]->key, (char*)authors->pairs[i]->value);
+void saveAuthors(binn *anonAuthors) {
+	FILE *fp = fopen(binnFile, "w");
+	fwrite(binn_ptr(anonAuthors), binn_size(anonAuthors), 1, fp);
+	fclose(fp);
 }
 
-int processAuthors(const xmlXPathObjectPtr authors) {
-	dictionary *anonAuthors = dictionary_new();
+int anonymizeAuthors(const xmlXPathObjectPtr authors) {
+	binn *anonAuthors = binn_object();
 
 	for (int i=0; i < authors->nodesetval->nodeNr; i++){
 		xmlChar *authorName = (xmlChar*)"";		
@@ -31,10 +41,63 @@ int processAuthors(const xmlXPathObjectPtr authors) {
 		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
 		xmlFree(authorName);
 	}
-
-	printAuthors(anonAuthors);
-	dictionary_free(anonAuthors);
+	
+	saveAuthors(anonAuthors);
+	binn_free(anonAuthors);
 	return 1;
+}
+
+char *data;
+
+binn *readAuthors() {
+	FILE *fp = fopen(binnFile, "rb");
+	if (fp == NULL) {
+		printf("Can't read bin file (%s)!\n", binnFile);
+		return NULL;
+	}
+
+        fseek(fp, 0, SEEK_END);
+        long fsize = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        data = malloc(fsize + 1);
+        fread(data, fsize, 1, fp);
+        fclose(fp);
+
+        data[fsize] = 0;
+
+        binn *obj = binn_open(data);
+	
+	return obj;
+}
+
+int deanonymizeAuthors(const xmlXPathObjectPtr authors) {
+	binn *anonAuthors = readAuthors();
+	if (anonAuthors == NULL) return 0;
+	
+	for (int i=0; i < authors->nodesetval->nodeNr; i++){
+		xmlChar *anonName = (xmlChar*)"";		
+		anonName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
+		
+		char *author = binn_object_str(anonAuthors, (char*)anonName);
+		if (author != NULL) {
+			xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)author);
+			printAuthors((char*)anonName, author);
+		}
+		
+		xmlFree(anonName);
+	}
+	
+	free(data);
+	binn_free(anonAuthors);
+	return 1;
+}
+
+int processAuthors(const xmlXPathObjectPtr authors) {
+	if (action == DEANONYMIZE)
+		return deanonymizeAuthors(authors);
+	
+	return anonymizeAuthors(authors);
 }
 
 int anonymizeComments(XMLBuff *infile) {

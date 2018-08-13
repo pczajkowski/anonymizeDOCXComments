@@ -4,4 +4,8 @@
 #include <string.h>
 #include "comments.h"
 
-int process(char const *infile, char *outfile);
+char binnFile[256];
+int action;
+
+int anonymize(char const *infile, char *outfile);
+int deanonymize(char const *infile, char *outfile);
