@@ -29,7 +29,7 @@ int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 		if (strcmp(commentsFile, path) == 0){
 			XMLBuff *comments = XMLBuffNew();
 			*comments = (XMLBuff){.data=buf, .size=size, .name=path};
-			
+
 			if (!processComments(archiveOut, comments)) return 0;
 			XMLBuffFree(comments);
 		} else {
@@ -54,7 +54,7 @@ int processDOCX(const char *infile, const char *outfile) {
 	Stopif(archive_write_open_filename(archiveOut, outfile) != ARCHIVE_OK, return 0, "Can't create new archive %s!\n", outfile);
 
 	if (!rewriteZIP(archiveIn, archiveOut)) return 0;
-	
+
 	Stopif(archive_read_free(archiveIn) != ARCHIVE_OK, return 0, "Can't free %s!\n", infile);
 	Stopif(archive_write_free(archiveOut) != ARCHIVE_OK, return 0, "Can't free %s!\n", outfile);
 	return 1;
@@ -63,11 +63,11 @@ int processDOCX(const char *infile, const char *outfile) {
 int process(const char *infile, char *outfile) {
 	if (!outfile || deanonymize) {
 		strcat(binnFile, infile);
-		strcat(binnFile, ".bin");
 	} else {
 		strcat(binnFile, outfile);
-		strcat(binnFile, ".bin");
 	}
+
+	strcat(binnFile, ".bin");
 
 	if (!outfile || strcmp(infile, outfile) == 0){
 		const char *outfile = "tmpFile.docx";
