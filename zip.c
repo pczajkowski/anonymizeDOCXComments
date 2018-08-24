@@ -60,27 +60,14 @@ int processDOCX(const char *infile, const char *outfile) {
 	return 1;
 }
 
-int anonymize(const char *infile, char *outfile) {
-	if (!outfile || strcmp(infile, outfile) == 0){
+int process(const char *infile, char *outfile) {
+	if (!outfile || deanonymize) {
 		strcat(binnFile, infile);
 		strcat(binnFile, ".bin");
-
-		const char *outfile = "tmpFile.docx";
-		processDOCX(infile, outfile);
-		remove(infile);
-		rename(outfile, infile);
 	} else {
 		strcat(binnFile, outfile);
 		strcat(binnFile, ".bin");
-
-		processDOCX(infile, outfile);
 	}
-	return 1;
-}
-
-int deanonymize(const char *infile, char *outfile) {
-	strcat(binnFile, infile);
-	strcat(binnFile, ".bin");
 
 	if (!outfile || strcmp(infile, outfile) == 0){
 		const char *outfile = "tmpFile.docx";
@@ -90,5 +77,6 @@ int deanonymize(const char *infile, char *outfile) {
 	} else {
 		processDOCX(infile, outfile);
 	}
+
 	return 1;
 }

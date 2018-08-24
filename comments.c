@@ -94,7 +94,7 @@ int deanonymizeAuthors(const xmlXPathObjectPtr authors) {
 }
 
 int processAuthors(const xmlXPathObjectPtr authors) {
-	if (action == DEANONYMIZE)
+	if (deanonymize)
 		return deanonymizeAuthors(authors);
 	
 	return anonymizeAuthors(authors);

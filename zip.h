@@ -5,7 +5,6 @@
 #include "comments.h"
 
 char binnFile[256];
-int action;
+extern int deanonymize;
 
-int anonymize(char const *infile, char *outfile);
-int deanonymize(char const *infile, char *outfile);
+int process(char const *infile, char *outfile);

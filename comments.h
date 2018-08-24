@@ -3,10 +3,7 @@
 #include <binn.h>
 #include "xmlbuff.h"
 
-#define ANONYMIZE 0
-#define DEANONYMIZE 1
-
 extern char binnFile[256];
-extern int action;
+extern int deanonymize;
 
 int anonymizeComments(XMLBuff *infile);

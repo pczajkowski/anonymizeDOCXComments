@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "zip.h"
 
-extern int action;
+int deanonymize;
 
 int main(int argc, char **argv) {
 	if (argc < 2) {
@@ -13,19 +13,19 @@ int main(int argc, char **argv) {
 
 	if (argc > 2) {
 		if (strcmp(argv[2], "-d") == 0) {
-			action = 1;
+			deanonymize = 1;
 
 			if (argc > 3) {
-				deanonymize(argv[1], argv[3]);
+				process(argv[1], argv[3]);
 				return 0;
 			}
 
-			deanonymize(argv[1], NULL);
+			process(argv[1], NULL);
 			return 0;
 		}
 		
-		anonymize(argv[1], argv[2]);
+		process(argv[1], argv[2]);
 	}
 	else
-		anonymize(argv[1], NULL);
+		process(argv[1], NULL);
 }
