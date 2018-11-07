@@ -1,5 +1,5 @@
-CFLAGS=`pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99
-LDLIBS=`pkg-config --libs libxml-2.0` -larchive -lbinn
+CFLAGS=`xml2-config --cflags` -g -Wall -Wextra -O3 -std=gnu99
+LDLIBS=`xml2-config --libs` -larchive -lbinn
 objects=comments.o zip.o xmlbuff.o
 mingwCFLAGS=`x86_64-w64-mingw32-pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99
 mingwLDLIBS=`x86_64-w64-mingw32-pkg-config --libs libxml-2.0` -larchive -lbinn-1.0
