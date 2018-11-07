@@ -1,10 +1,10 @@
-CFLAGS=`xml2-config --cflags` -g -Wall -Wextra -O3 -std=gnu99
+CFLAGS=`xml2-config --cflags` -g -Wall -Wextra -O3 -std=c99
 LDLIBS=`xml2-config --libs` -larchive -lbinn
 objects=comments.o zip.o xmlbuff.o
-mingwCFLAGS=`x86_64-w64-mingw32-pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=gnu99
+mingwCFLAGS=`x86_64-w64-mingw32-pkg-config --cflags --libs libxml-2.0` -g -Wall -Wextra -O3 -std=c99
 mingwLDLIBS=`x86_64-w64-mingw32-pkg-config --libs libxml-2.0` -larchive -lbinn-1.0
 mingw=x86_64-w64-mingw32-gcc
-MACCFLAGS=`xml2-config --cflags` `pkg-config --cflags --libs libarchive` -g -Wall -Wextra -O3 -std=gnu99
+MACCFLAGS=`xml2-config --cflags` `pkg-config --cflags --libs libarchive` -g -Wall -Wextra -O3 -std=c99
 MACLDLIBS=`xml2-config --libs` -lbinn
 
 anonymize: $(objects)
