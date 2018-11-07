@@ -1,7 +1,8 @@
-#define _GNU_SOURCE //asks stdio.h to include asprintf
 #include <stdio.h>
 #include "comments.h"
 #include "stopif.h"
+
+#define NAME_LENGTH 20
 
 void printAuthors(const char *authorName, const char *anonName) {
 	printf("\"%s\" is now \"%s\"\n", authorName, anonName);
@@ -15,8 +16,9 @@ char* anonymizeAuthor(binn *anonAuthors, const xmlChar *authorName) {
 
 	if (newName)
 		return newName;
-
-	asprintf(&newName, "Author%d", ++authorsCount);
+	
+	newName = malloc(NAME_LENGTH);
+	snprintf(newName, NAME_LENGTH,"Author%d", ++authorsCount);
 	binn_object_set_str(anonAuthors, name, newName);
 	binn_object_set_str(anonAuthors, newName, name);
 	printAuthors(name, newName);
