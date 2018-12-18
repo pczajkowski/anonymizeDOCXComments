@@ -18,6 +18,11 @@ char* anonymizeAuthor(binn *anonAuthors, const xmlChar *authorName) {
 		return newName;
 	
 	newName = malloc(NAME_LENGTH);
+	if (newName == NULL) {
+		printf("Couldn't allocate memory for %s!\n", name);
+		return NULL;
+	}
+
 	snprintf(newName, NAME_LENGTH,"Author%d", ++authorsCount);
 	binn_object_set_str(anonAuthors, name, newName);
 	binn_object_set_str(anonAuthors, newName, name);
@@ -40,6 +45,11 @@ int anonymizeAuthors(const xmlXPathObjectPtr authors) {
 		xmlChar *authorName = (xmlChar*)"";		
 		authorName = xmlNodeGetContent(authors->nodesetval->nodeTab[i]);
 		char *anonAuthor = anonymizeAuthor(anonAuthors, authorName);
+		if (anonAuthor == NULL) {
+			printf("Couldn't anonymize %s!\n", authorName);
+			return 0;
+		}
+		
 		xmlNodeSetContent(authors->nodesetval->nodeTab[i], (xmlChar*)anonAuthor);
 		xmlFree(authorName);
 	}
@@ -63,6 +73,11 @@ binn *readAuthors() {
         fseek(fp, 0, SEEK_SET);
 
         data = malloc(fsize + 1);
+	if (data == NULL) {
+		puts("Couldn't allocate memory for data!");
+		return NULL;
+	}
+	
         fread(data, fsize, 1, fp);
         fclose(fp);
 

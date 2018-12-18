@@ -28,6 +28,11 @@ int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 
 		if (strcmp(commentsFile, path) == 0){
 			XMLBuff *comments = XMLBuffNew();
+			if (comments == NULL) {
+				puts("Couldn't obtain comments!");
+				return 0;
+			}
+			
 			*comments = (XMLBuff){.data=buf, .size=size, .name=path};
 
 			if (!processComments(archiveOut, comments)) return 0;
