@@ -71,10 +71,10 @@ int process(const char *infile, char *outfile) {
 	strcat(binnFile, ".bin");
 
 	if (!outfile || strcmp(infile, outfile) == 0){
-		const char *outfile = "tmpFile.docx";
-		processDOCX(infile, outfile);
+		const char *tmpFile = "tmpFile.docx";
+		processDOCX(infile, tmpFile);
 		remove(infile);
-		rename(outfile, infile);
+		rename(tmpFile, infile);
 	} else {
 		processDOCX(infile, outfile);
 	}
