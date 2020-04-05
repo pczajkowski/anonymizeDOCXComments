@@ -64,7 +64,7 @@ char *data;
 binn *readAuthors() {
 	FILE *fp = fopen(binnFile, "rb");
 	if (fp == NULL) {
-		printf("Can't read bin file (%s)!\n", binnFile);
+		printf("Couldn't open bin file (%s)!\n", binnFile);
 		return NULL;
 	}
 
@@ -78,7 +78,12 @@ binn *readAuthors() {
 		return NULL;
 	}
 	
-        fread(data, fsize, 1, fp);
+        size_t result = fread(data, fsize, 1, fp);
+	if (result != 1) {
+		printf("Couldn't read bin file (%s)!\n", binnFile);
+		return NULL;
+	}
+
         fclose(fp);
 
         data[fsize] = 0;
