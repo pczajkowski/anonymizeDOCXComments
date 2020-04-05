@@ -24,6 +24,4 @@ You can also de-anonymize comments. Proper bin file, named "<your_orginial_docx>
 
 *./anonymize test.docx -d test2.docx* - de-anonymized version will be saved as test2.docx leaving original test.docx intact.
 
-You'll need libarchive, libxml2 and [lbinn](https://github.com/liteserver/binn) to compile it. It was created as learning project while I was exploring C, so use it freely, but at your own risk. Output was tested with Word 2013 and Libre Office Writer.
-
-To relieve your pain I've added compiled Windows 64 bit binary in the bin folder. It includes all necessary MingW dlls. Enjoy!
+You'll need libarchive, libxml2 and [lbinn](https://github.com/liteserver/binn) to compile it. It was created as learning project while I was exploring C, so use it freely, but at your own risk. Output was tested with Word 2013 and Libre Office Writer. Enjoy!
