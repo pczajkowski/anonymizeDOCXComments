@@ -35,5 +35,5 @@ jobs:
         sudo make install
         cd ..
         
-    - name: Install dependencies
+    - name: Build
       run: make
