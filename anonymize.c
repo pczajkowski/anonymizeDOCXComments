@@ -11,21 +11,17 @@ int main(int argc, char **argv) {
 		return 0;
 	}
 
+	char *infile = argv[1];
+	char *outfile = NULL;
+
 	if (argc > 2) {
 		if (strcmp(argv[2], "-d") == 0) {
 			deanonymize = 1;
-
-			if (argc > 3) {
-				process(argv[1], argv[3]);
-				return 0;
-			}
-
-			process(argv[1], NULL);
-			return 0;
+			if (argc > 3) outfile = argv[3];
+		} else {
+			outfile = argv[2];
 		}
-		
-		process(argv[1], argv[2]);
 	}
-	else
-		process(argv[1], NULL);
+
+	process(infile, outfile);
 }
