@@ -12,7 +12,7 @@ test: anonymize
 	@./anonymize testFiles/input.docx testFiles/output.docx
 	@cmp testFiles/input.docx testFiles/output.docx -s ; if [ $$? -eq 0 ] ; then echo "FAILURE: Files should differ after anonymizing!"; exit 1; fi
 	@./anonymize testFiles/output.docx -d
-	@cmp testFiles/input.docx testFiles/output.docx -s ; if [ $$? -eq 0 ] ; then echo "OK"; else echo "FAILURE: Files should be the same after de-anonymizing!"; fi
-	@rm testFiles/output.docx
+	@cmp testFiles/input.docx testFiles/output.docx -s ; if [ $$? -eq 0 ] ; then echo "OK"; else echo "FAILURE: Files should be the same after de-anonymizing!"; exit 1; fi
+	@rm testFiles/output.docx testFiles/input.docx.bin testFiles/output.docx.bin
 
 default: anonymize
