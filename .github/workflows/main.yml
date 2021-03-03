@@ -34,6 +34,9 @@ jobs:
         make
         sudo make install
         cd ..
-        
+
     - name: Build
       run: make
+
+    - name: Test
+      run: make test
