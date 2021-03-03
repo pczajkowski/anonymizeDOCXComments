@@ -27,11 +27,14 @@ int rewriteZIP(struct archive *archiveIn, struct archive *archiveOut) {
 		Stopif(archive_read_data(archiveIn, buf, size) != size, return 0, "Archive entry has no size (%s)!\n", path);
 
 		if (strcmp(commentsFile, path) == 0){
-			XMLBuff *comments = XMLBuffNew();
-			Stopif(comments == NULL, return 0, "Couldn't obtain comments!\n");
-			*comments = (XMLBuff){.data=buf, .size=size, .name=path};
+			XMLBuff *comments = XMLBuffNew(buf, path, size);
+			Stopif(!comments, return 0, "Couldn't obtain comments!\n");
 
-			if (!processComments(archiveOut, comments)) return 0;
+			if (!processComments(archiveOut, comments)) {
+				XMLBuffFree(comments);
+				return 0;
+			}
+
 			XMLBuffFree(comments);
 		} else {
 			Stopif(archive_write_header(archiveOut, entryIn) != ARCHIVE_OK, return 0, "Can't write entry header!\n");
