@@ -13,6 +13,7 @@ int processComments(struct archive *archiveOut, XMLBuff *comments) {
 	Stopif(archive_write_header(archiveOut, newEntry) != ARCHIVE_OK, return 0, "Can't write entry header (comments)!\n");
 	Stopif(archive_write_data(archiveOut, comments->data, comments->size) != comments->size, return 0, "Can't write data (comments)!\n");
 	archive_entry_free(newEntry);
+	xmlFree(comments->data);
 	return 1;
 }
 
