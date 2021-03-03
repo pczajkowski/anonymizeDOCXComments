@@ -33,6 +33,7 @@ jobs:
         cd binn
         make
         sudo make install
+        sudo ldconfig
         cd ..
 
     - name: Build
